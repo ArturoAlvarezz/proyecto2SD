@@ -1,1 +1,3 @@
 # proyecto2SD
+
+Desarrollar un programa que permita vincular los distintos perfiles en los paneles de comunicación, mostrando las salas de chats adecuadas de cada perfil. Se deberá administrar correctamente el uso de socket de manera “local”, pero teniendo en consideración que deberán ser más de uno y que, eventualmente, se tendrá una tarea de respaldos en otro equipo y/o nube. La información del chat deberá ser almacenada en algún “documento”, ya que con esto se podrán obtener las estadísticas y volver a mostrar el contenido “histórico” de cada sala de chat. Para el almacenamiento de la información es posible utilizar ficheros o una base de datos relacional, lo que será ajeno al propio funcionamiento del sistema.
