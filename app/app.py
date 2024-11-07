@@ -17,7 +17,7 @@ data = [
     },
     {
         "usuario": "facilisis",
-        "tipo": "medico"
+        "tipo": "pabellon"
     },
     {
         "usuario": "mus",
@@ -40,6 +40,12 @@ def verificar_credenciales(entry_email, entry_password, ventana_usuario, frame_l
         mostrar_chats(ventana_usuario, frame_login)  # Si las credenciales son correctas, mostrar los chats
     else:
         messagebox.showerror("Error", "Credenciales incorrectas")  # Si son incorrectas, mostrar error
+
+def enviar_mensaje(chat, entry_mensaje):
+    mensaje = entry_mensaje.get()
+    chat.insert('end', f"Yo: {mensaje}\n")
+    entry_mensaje.delete(0, 'end')
+
 
 def iniciar_administrador():
     ventana_admin = tk.Toplevel(root)
@@ -169,11 +175,6 @@ def mostrar_usuarios(ventana_usuario, frame_chats, frame_header, btn_usuarios, l
 
     label_titulo_medicos = tk.Label(frame_medicos, text="Médicos", bg='salmon1', font=('Arial', 14))
     label_titulo_medicos.pack(fill='x', pady=5)
-
-    for usuario in data:
-        if usuario["tipo"] == "medico":
-            medico_label = tk.Button(frame_medicos, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=sala_de_chat)
-            medico_label.pack(fill='x', pady=5)
     
     frame_admision = tk.Frame(frame_usuarios)
     frame_admision.pack(fill='both', expand=True)
@@ -181,32 +182,17 @@ def mostrar_usuarios(ventana_usuario, frame_chats, frame_header, btn_usuarios, l
     label_titulo_admision = tk.Label(frame_admision, text="Admisión", bg='salmon1', font=('Arial', 14))
     label_titulo_admision.pack(fill='x', pady=5)
 
-    for usuario in data:
-        if usuario["tipo"] == "admision":
-            admision_label = tk.Button(frame_admision, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=sala_de_chat)
-            admision_label.pack(fill='x', pady=5)
-
     frame_pabellon = tk.Frame(frame_usuarios)
     frame_pabellon.pack(fill='both', expand=True)
 
     label_titulo_pabellon = tk.Label(frame_pabellon, text="Pabellón", bg='salmon1', font=('Arial', 14))
     label_titulo_pabellon.pack(fill='x', pady=5)
 
-    for usuario in data:
-        if usuario["tipo"] == "pabellon":
-            pabellon_label = tk.Button(frame_pabellon, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=sala_de_chat)
-            pabellon_label.pack(fill='x', pady=5)
-
     frame_examenes = tk.Frame(frame_usuarios)
     frame_examenes.pack(fill='both', expand=True)
 
     label_titulo_examenes = tk.Label(frame_examenes, text="Exámenes", bg='salmon1', font=('Arial', 14))
     label_titulo_examenes.pack(fill='x', pady=5)
-
-    for usuario in data:
-        if usuario["tipo"] == "examenes":
-            examenes_label = tk.Button(frame_examenes, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=sala_de_chat)
-            examenes_label.pack(fill='x', pady=5)
 
     frame_auxiliar = tk.Frame(frame_usuarios)
     frame_auxiliar.pack(fill='both', expand=True)
@@ -215,12 +201,56 @@ def mostrar_usuarios(ventana_usuario, frame_chats, frame_header, btn_usuarios, l
     label_titulo_auxiliar.pack(fill='x', pady=5)
 
     for usuario in data:
-        if usuario["tipo"] == "auxiliar":
-            auxiliar_label = tk.Button(frame_auxiliar, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=sala_de_chat)
+        if usuario["tipo"] == "medico":
+            medico_label = tk.Button(frame_medicos, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=lambda: sala_de_chat(ventana_usuario, frame_header, label_usuarios, frame_usuarios, btn_regresar_chats))
+            medico_label.pack(fill='x', pady=5)
+        elif usuario["tipo"] == "auxiliar":
+            auxiliar_label = tk.Button(frame_auxiliar, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=lambda: sala_de_chat(ventana_usuario, frame_header, label_usuarios, frame_usuarios, btn_regresar_chats))
             auxiliar_label.pack(fill='x', pady=5)
+        elif usuario["tipo"] == "admision":
+            admision_label = tk.Button(frame_admision, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=lambda: sala_de_chat(ventana_usuario, frame_header, label_usuarios, frame_usuarios, btn_regresar_chats))
+            admision_label.pack(fill='x', pady=5)
+        elif usuario["tipo"] == "pabellon":
+            pabellon_label = tk.Button(frame_pabellon, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=lambda: sala_de_chat(ventana_usuario, frame_header, label_usuarios, frame_usuarios, btn_regresar_chats))
+            pabellon_label.pack(fill='x', pady=5)
+        elif usuario["tipo"] == "examenes":
+            examenes_label = tk.Button(frame_examenes, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=lambda: sala_de_chat(ventana_usuario, frame_header, label_usuarios, frame_usuarios, btn_regresar_chats))
+            examenes_label.pack(fill='x', pady=5)
+        else:
+            pass
+
             
-def sala_de_chat():
-    pass
+def sala_de_chat(ventana_usuario, header_frame, label_usuarios, frame_usuarios, btn_regresar_chats):
+    frame_usuarios.pack_forget()
+    label_usuarios.pack_forget()
+    btn_regresar_chats.pack_forget()
+
+    # Encabezado "Chat"
+    label_chat = tk.Label(header_frame, text="Chat", bg='lightblue', font=('Arial', 14))
+    label_chat.pack(side='left', padx=70)
+
+    # Botón para regresar a los chats
+    btn_regresar_chats = tk.Button(header_frame, text="Chats", command=lambda: [mostrar_chats(ventana_usuario, frame_usuarios), label_usuarios.pack_forget(), btn_regresar_chats.pack_forget(), header_frame.pack_forget(), frame_chat.pack_forget()])
+    btn_regresar_chats.pack(side='right', padx=10)
+
+    # Frame para el área de chat
+    frame_chat = tk.Frame(ventana_usuario)
+    frame_chat.pack(fill='both', expand=True)
+
+    # Área de chat con un límite de altura
+    chat = tk.Text(frame_chat, height=20)  # Limita la altura del chat
+    chat.pack(fill='both', expand=True, padx=10, pady=(10, 0))
+
+    # Entrada de mensaje y botón para enviar
+    entry_frame = tk.Frame(frame_chat)
+    entry_frame.pack(fill='x', padx=10, pady=10)
+
+    entry_mensaje = tk.Entry(entry_frame)
+    entry_mensaje.pack(fill='x', side='left', expand=True)
+
+    btn_enviar = tk.Button(entry_frame, text="Enviar", command=lambda: enviar_mensaje(chat, entry_mensaje))
+    btn_enviar.pack(side='right', padx=10)
+    
 
 # Crear ventana principal
 root = tk.Tk()
