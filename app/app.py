@@ -148,10 +148,9 @@ def mostrar_chats(ventana_usuario, frame_login):
     frame_chats.pack(fill='both', expand=True)
 
     # Crear los chats
-    chats = [("Miguel", "❤️"), ("Teresita", "🌙")]
-    for nombre, emoji in chats:
-        chat_label = tk.Label(frame_chats, text=f"{emoji} {nombre}", bg='white', font=('Arial', 12), anchor="w", padx=10)
-        chat_label.pack(fill='x', pady=5)
+    for usuario in data:
+        medico_label = tk.Button(frame_chats, text=usuario["usuario"], bg='white', font=('Arial', 12), anchor="w", padx=10, command=lambda: sala_de_chat(ventana_usuario, header_frame, label_chats, frame_chats, btn_usuarios))
+        medico_label.pack(fill='x', pady=5)
 
 def mostrar_usuarios(ventana_usuario, frame_chats, frame_header, btn_usuarios, label_chats):
 
